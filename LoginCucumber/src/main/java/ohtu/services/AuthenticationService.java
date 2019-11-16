@@ -4,19 +4,19 @@ import ohtu.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 import ohtu.data_access.UserDao;
+import java.lang.Character;
 
 public class AuthenticationService {
 
-    private UserDao userDao;
+    private final UserDao userDao;
 
-    public AuthenticationService(UserDao userDao) {
+    public AuthenticationService(final UserDao userDao) {
         this.userDao = userDao;
     }
 
-    public boolean logIn(String username, String password) {
-        for (User user : userDao.listAll()) {
-            if (user.getUsername().equals(username)
-                    && user.getPassword().equals(password)) {
+    public boolean logIn(final String username, final String password) {
+        for (final User user : userDao.listAll()) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                 return true;
             }
         }
@@ -24,7 +24,7 @@ public class AuthenticationService {
         return false;
     }
 
-    public boolean createUser(String username, String password) {
+    public boolean createUser(final String username, final String password) {
         if (userDao.findByName(username) != null) {
             return false;
         }
@@ -38,9 +38,22 @@ public class AuthenticationService {
         return true;
     }
 
-    private boolean invalid(String username, String password) {
-        // validity check of username and password
+    private boolean invalid(final String username, final String password) {
+        if (username.length()<3){
+            return true;
+        }
+        if (password.length()<8){
+            return true;
+        }
+        boolean invalid = true;
+        for (char ch:password.toLowerCase().toCharArray()){
+            int charType = Character.getType(ch);
+            if (charType != Character.LOWERCASE_LETTER && charType != Character.UPPERCASE_LETTER){
+                invalid = false;
+                continue;
+            }
+        };
 
-        return false;
+        return invalid;
     }
 }
