@@ -1,5 +1,6 @@
 package ohtu;
 
+import io.cucumber.java.Before;
 import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
@@ -10,11 +11,25 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import ohtu.UserDaoForTests;
+import ohtu.authentication.AuthenticationService;
+import ohtu.data_access.UserDao;
+import ohtu.domain.User;
 
 public class Stepdefs {
     //WebDriver driver = new ChromeDriver();
     WebDriver driver = new HtmlUnitDriver();
     String baseUrl = "http://localhost:4567";
+    UserDao userDao;
+    AuthenticationService auth;
+
+
+    @Before
+    public void setup() {
+        userDao = new UserDaoForTests();
+        auth = new AuthenticationService(userDao);
+    }
+
     
     @Given("login is selected")
     public void loginIsSelected() {
@@ -59,7 +74,7 @@ public class Stepdefs {
         assertTrue(driver.getPageSource().contains(pageContent));
     }
 
-    
+
     @Given("command new user is selected")
     public void newUserIsSelected() {
         driver.get(baseUrl);
@@ -88,13 +103,45 @@ public class Stepdefs {
         registerWith(username, password, confirmation);
     }
 
+    @Given("user with username {string} with password {string} is successfully created")
+    public void userCreated(String username, String password) throws Throwable{
+        userDao.add(new User(username, password));
+    }
+
+    @Given("user with username {string} and password {string} is tried to be created")
+    public void userNotCreated(String username, String password) throws Throwable{
+//        registerWith(username, password, password);
+    }
+    @Given ("user returns from registration form")
+    public void userReturnsFromRegistrationForm(){
+        WebElement element = driver.findElement(By.linkText("back to home"));       
+        element.click();   
+    }
+
+    @Given ("newly registered user continues to application mainpage")
+    public void continueToApplicationMainPage(){
+        WebElement element = driver.findElement(By.linkText("continue to application mainpage"));       
+        element.click();   
+
+    }
+    @Then ("user is logged out")
+    public void userLogout(){
+        WebElement element = driver.findElement(By.linkText("logout"));       
+        element.click();   
+    }
+        @Then ("logout")   
+    public void logout(){
+        WebElement element = driver.findElement(By.linkText("logout"));       
+        element.click();   
+    }
+
+
     @Then("a new user is created")
     public void aNewUserIsCreated() {
         pageHasContent("Welcome to Ohtu Application!");
     }    
 
     @Then("user is not created and error {string} is reported")
-    
     public void userIsNotCreatedAndAnErrorIsReported(String error) {
         pageHasContent("Create username and give password");
         pageHasContent(error);
