@@ -98,11 +98,20 @@ public class KauppaTest {
     public void uusiViitePyydetaan(){
         k.aloitaAsiointi();
         k.lisaaKoriin(1);     // ostetaan tuotetta numero 1 eli maitoa
-        k.aloitaAsiointi();   // putsataan kori
-        k.lisaaKoriin(1);     // ostetaan tuotetta numero 1 eli maitoa
         k.tilimaksu("pekka", "12345");
         k.tilimaksu("pekka", "12345");
         verify(viite, times(2)).uusi();
+    }
+
+    @Test
+    public void koristaPoistoToimii(){
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);     // ostetaan tuotetta numero 1 eli maitoa
+        k.lisaaKoriin(1);     // ostetaan tuotetta numero 1 eli maitoa
+        k.poistaKorista(1);
+        k.tilimaksu("pekka", "12345");
+        // laskutetaan vain yksi maito
+        verify(pankki).tilisiirto("pekka", 42, "12345", "33333-44455", 5);   
 
     }
 
