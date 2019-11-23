@@ -7,7 +7,6 @@ public class TennisGame {
     private String player1Name;
     private String player2Name;
 
-
     private String[] scores_even={"Love-All", "Fifteen-All", "Thirty-All", "Forty-All", "Deuce"};
     private String[] scores = {"Love", "Fifteen", "Thirty", "Forty"};
     private String[] scores_advantage ={"Win for player2", "Advantage player2",null, "Advantage player1","Win for player1"};
@@ -26,13 +25,13 @@ public class TennisGame {
 
     public String getScore() {
         // if game is tied
-        if (player1Score==player2Score){
+        if (player1Score == player2Score){
             return scores_even[player1Score < 4 ? player1Score : 4]; // return value of default "deuce"
         }
-        // if game isnt tied and points tally has reached 4
+        // if game isn't tied and points tally has reached 4
         else if (player1Score>=4 || player2Score>=4)
         {
-            // cap results and map them to array
+            // cap results and map them to array, need a difference of two to win
             int delta = player1Score-player2Score;
             delta = Math.min(delta,2);
             delta = Math.max(delta,-2);
