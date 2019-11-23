@@ -1,32 +1,32 @@
 package ohtu.intjoukkosovellus;
 
 import java.util.Scanner;
+import ohtu.io.Input;
+import ohtu.io.InputIF;
 
 public class Sovellus {
 
     private static IntJoukko A, B, C;
+    private final static InputIF lukija = new Input();
 
-    private static String luku() {
-        Scanner lukija = new Scanner(System.in);
-        String luettu = lukija.nextLine();
-        return luettu;
-    }
 
     private static IntJoukko mikaJoukko() {
-        String luettu;
-        Scanner lukija = new Scanner(System.in);
-        luettu = luku();
-        while (true) {
-            if (luettu.equals("A") || luettu.equals("a")) {
-                return A;
-            } else if (luettu.equals("B") || luettu.equals("b")) {
-                return B;
-            } else if (luettu.equals("C") || luettu.equals("c")) {
-                return C;
-            } else {
-                System.out.println("Virheellinen joukko! " + luettu);
-                System.out.print("Yritä uudelleen!");
-                luettu = luku();
+        char joukko;
+        while (true){
+            joukko = lukija.getChar();
+            switch(joukko){
+                case 'A':
+                case 'a':
+                    return A;
+                case 'B':
+                case 'b':
+                    return B;
+                case 'C':
+                case 'c':
+                    return C;
+                default:
+                    System.out.println("Virheellinen joukko! " + joukko);
+                    System.out.print("Yritä uudelleen!");
             }
         }
     }
@@ -34,12 +34,11 @@ public class Sovellus {
     private static void lisaa() {
         int lisLuku;
         IntJoukko joukko;
-        Scanner lukija = new Scanner(System.in);
         System.out.print("Mihin joukkoon? ");
         joukko = mikaJoukko();
         System.out.println("");
         System.out.print("Mikä luku lisätään? ");
-        lisLuku = lukija.nextInt();
+        lisLuku = lukija.getInt();
         joukko.lisaa(lisLuku);
         return;
 
