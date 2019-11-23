@@ -6,5 +6,6 @@ public interface InputIF{
 
     public char getChar();
 
+    public String getLine();
 
 }

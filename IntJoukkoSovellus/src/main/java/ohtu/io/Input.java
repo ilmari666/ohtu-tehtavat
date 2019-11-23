@@ -16,4 +16,9 @@ public class Input implements InputIF {
         return lukija.next().charAt(0);
     };
 
+    @Override
+    public String getLine(){
+        return lukija.nextLine();
+    };
+
 }
