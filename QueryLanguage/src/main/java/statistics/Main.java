@@ -12,8 +12,18 @@ public class Main {
         Statistics stats = new Statistics(new PlayerReaderImpl(url));
 
         QueryBuilder qb = new QueryBuilder();
-        Matcher m = qb.hasAtLeast(5, "goals").hasAtLeast(5, "assists").playsIn("PHI").build();
-        
+//        Matcher m = qb.hasAtLeast(5, "goals").hasAtLeast(5, "assists").playsIn("PHI").build();
+
+        Matcher m = qb.or(
+            qb.playsIn("PHI")
+                .hasAtLeast(10, "assists")
+                .hasFewerThan(8, "goals").build(),
+
+            qb.playsIn("EDM")
+                .hasAtLeast(20, "points").build()
+        ).build();
+
+
         for (Player player : stats.matches(m)) {
             System.out.println(player);
         }

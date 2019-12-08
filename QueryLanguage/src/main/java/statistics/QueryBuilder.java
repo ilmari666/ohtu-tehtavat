@@ -12,8 +12,15 @@ public class QueryBuilder {
         matchers.add(new All());
     }
 
+    public void reset(){
+        matchers.clear();
+        matchers.add(new All());
+    }
+
     public Matcher build() {
-        return new And(matchers.toArray(new Matcher[matchers.size()]));
+        Matcher matcher = new And(matchers.toArray(new Matcher[matchers.size()]));
+        this.reset();
+        return matcher;
     }
 
     public QueryBuilder playsIn(String team){
@@ -37,4 +44,10 @@ public class QueryBuilder {
         matchers.add(new All());
         return this;
     }
+
+    public QueryBuilder or(Matcher... matchrs){
+        matchers.add(new Or(matchrs));
+        return this;
+    }
+
 }
